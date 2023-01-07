@@ -25,7 +25,7 @@ class LinearRegression:
         for k in range(nb_iters):
             for i in range(self.m):
                 f_wb = np.dot(self.X_train[i], w)+b - self.y_train[i]
-                w = w - learning_rate*f_wb*self.X_train[i]
+                w = w*(1 - learning_rate*_lambda/self.m) - learning_rate*f_wb*self.X_train[i]
                 b = b - learning_rate*f_wb
             
             if not k%10:
