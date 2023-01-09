@@ -41,7 +41,7 @@ class LinearRegression:
             b = b - learning_rate*dj_db
             
             if not k%10:
-                print(f"[+] Epochs: {k}/{self.m} Cost Function : {self.cost(w,b)}")
+                print(f"[+] Epochs: {k}/{epochs} Cost Function : {self.cost(w,b)}")
         
         self.w, self.b = w, b
 
