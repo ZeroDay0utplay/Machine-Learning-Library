@@ -19,23 +19,35 @@ class LinearRegression:
             J += ((np.dot(w, self.X_train[i] + b) - self.y_train[i])**2)
         
         return int(J/2*self.m)
+    
 
-
-    def train(self, learning_rate=0.01, epochs=100, _lambda=0, ):
-        w = np.zeros(self.n)
-        b = 0
-
+    def gradient(self, w, b):
         dj_dw = np.zeros(self.n)
         dj_db = 0
+        
+        for i in range(self.m):
+            f_wb = np.dot(self.X_train[i], w)+b - self.y_train[i]
+            dj_dw += f_wb*self.X_train[i]
+            dj_db += f_wb
+        
+        return dj_dw/self.m, dj_db/self.m
+
+
+    def train(self, learning_rate=0.01, epochs=100, _lambda=0, gradient_fn=None, b_init=None, w_init=None):
+        if gradient_fn is None:
+            gradient_fn = self.gradient
+        
+        if b_init is None:
+            b_init = 0
+        
+        if w_init is None:
+            w_init = np.zeros(self.n)
+
+        w = w_init
+        b = b_init
 
         for k in range(epochs):
-            for i in range(self.m):
-                f_wb = np.dot(self.X_train[i], w)+b - self.y_train[i]
-                dj_dw += f_wb*self.X_train[i]
-                dj_db += f_wb
-            
-            dj_dw /= self.m
-            dj_db /= self.m
+            dj_dw, dj_db = gradient_fn(w, b)
                
             w = w*(1 - learning_rate*_lambda/self.m) - learning_rate*dj_dw
             b = b - learning_rate*dj_db
