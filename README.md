@@ -4,4 +4,4 @@
 ### All you need to do is: pip install dist/*.whl
 # Supervised ML algorithms
 ## Linear Regression
-### start by "import LinearRegression.LinearRegression as LinearRegression"
+### start by "from mlib.LinearRegression import LinearRegression"
