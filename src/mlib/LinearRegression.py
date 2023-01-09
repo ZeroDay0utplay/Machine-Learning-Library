@@ -62,3 +62,13 @@ class LinearRegression:
 
     def predict(self, X_test):
         return X_test*self.w + self.b
+    
+    def accuracy(self, x, y, diff=1):
+        true = 0
+        acc = abs(self.predict(x) - y)
+        print(acc)
+        for t in acc:
+            if t <= diff:
+                true +=1
+        print(f"[+] Accuracy: {true/len(acc)*100}%")
+        return true/len(acc)

@@ -20,6 +20,7 @@ y_train = df["y"]
 X_train = np.array([float(i) for i in X_train])
 y_train = np.array([float(i) for i in y_train])
 x_test = np.array([float(i) for i in x_test])
+y_test = np.array([float(i) for i in y_test])
 
 
 mx = max(X_train)
@@ -41,7 +42,9 @@ for i in range(x_test.shape[0]):
 
 
 lr = LinearRegression(X_train, y_train)
-w, b = lr.train(epochs=100000, learning_rate=1e-6)
+w, b = lr.train(epochs=10000, learning_rate=0.01)
 y_pred = lr.predict(x_test)
 print(w, b)
 print(y_pred)
+
+lr.accuracy(x_test, y_test, diff=10)
