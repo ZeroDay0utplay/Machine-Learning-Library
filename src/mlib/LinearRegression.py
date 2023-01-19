@@ -6,10 +6,10 @@ class LinearRegression:
         self.y_train = y_train
         
         if len(X_train.shape) == 1:
-            self.X_train.shape = self.X_train.shape[0], 1
-            self.y_train.shape = self.y_train.shape[0], 1
-
-        self.m, self.n = self.X_train.shape
+            self.m, self.n = self.X_train.shape[0], 1
+            self.m, self.n = self.y_train.shape[0], 1
+        else:
+            self.m, self.n = self.X_train.shape
             
     
 
@@ -61,14 +61,70 @@ class LinearRegression:
     
 
     def predict(self, X_test):
-        return X_test*self.w + self.b
+        return np.dot(X_test,self.w) + self.b
     
-    def accuracy(self, x, y, diff=1):
-        true = 0
-        acc = abs(self.predict(x) - y)
-        print(acc)
-        for t in acc:
-            if t <= diff:
-                true +=1
-        print(f"[+] Accuracy: {true/len(acc)*100}%")
-        return true/len(acc)
+
+    def mae(self, y, y_pred):
+        ae = 0
+        ln = len(y)
+        for i in range(ln):
+            ae += abs((y[i]-y_pred[i]))
+        return ae/ln
+
+    def mse(self, y, y_pred):
+        se = 0
+        ln = len(y)
+        for i in range(ln):
+            se += (y[i]-y_pred[i])**2
+        return se/ln
+    
+
+    def rmse(self, y, y_pred):
+        return np.sqrt(self.mse(y, y_pred))
+
+
+    def mape(self, y, y_pred):
+        ae = 0
+        ln = len(y)
+        for i in range(ln):
+            ae += abs((y[i]-y_pred[i])/y[i])
+        return ae/ln
+    
+    def r2(self, y, y_pred):
+        ln = len(y)
+        y_bar = sum(y)/ln
+        r2_up = 0
+        r2_down = 0
+        for i in range(ln):
+            r2_up += (y[i]-y_pred[i])**2
+            r2_down += (y[i]-y_bar)**2
+        return 1 - (r2_up/r2_down)
+    
+
+    def zdo_acc(self, y, y_pred):
+        zdo = 0
+        ln = len(y)
+        for i in range(ln):
+            y_i = y[i]
+            y_hat_i = y_pred[i]
+            zdo += (min(y_i, y_hat_i)/max(y_i, y_hat_i))
+        zdo /= ln
+        return zdo
+
+
+    def accuracy(self, x, y, error="r2"):
+        y_pred = self.predict(x)
+        if error == "zdo_acc":
+            acc = self.zdo_acc(y, y_pred)
+        elif error == "mae":
+            acc = self.mae(y, y_pred)
+        elif error == "mse":
+            acc = self.mse(y, y_pred)
+        elif error == "rmse":
+            acc = self.rmse(y, y_pred)
+        elif error == "mape":
+            acc = self.mape(y, y_pred)
+        elif error == "r2" or True:
+            acc = self.r2(y, y_pred)
+        print(f"[+] Accuracy: {acc*100}%")
+        return acc
