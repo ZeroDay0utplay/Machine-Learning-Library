@@ -13,7 +13,7 @@ class LinearRegression:
             
     
 
-    def cost(self, w, b):
+    def loss(self, w, b): # Squared error cost
         J = 0
         for i in range(self.m):
             J += ((np.dot(w, self.X_train[i] + b) - self.y_train[i])**2)
@@ -26,9 +26,9 @@ class LinearRegression:
         dj_db = 0
         
         for i in range(self.m):
-            f_wb = np.dot(self.X_train[i], w)+b - self.y_train[i]
-            dj_dw += f_wb*self.X_train[i]
-            dj_db += f_wb
+            derr_f_wb = np.dot(self.X_train[i], w)+b - self.y_train[i]
+            dj_dw += derr_f_wb*self.X_train[i]
+            dj_db += derr_f_wb
         
         return dj_dw/self.m, dj_db/self.m
 
@@ -53,7 +53,7 @@ class LinearRegression:
             b = b - learning_rate*dj_db
             
             if not k%(epochs/10):
-                print(f"[+] Epochs: {k}/{epochs} Cost Function : {self.cost(w,b)}")
+                print(f"[+] Epochs: {k}/{epochs} loss Function : {self.loss(w,b)}")
         
         self.w, self.b = w, b
 

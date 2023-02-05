@@ -1,0 +1,3 @@
+from mlib.PolynomialRegression import PolynomialRegression
+from mlib.LinearRegression import LinearRegression
+from mlib.LogisticRegression import LogisticRegression
