@@ -39,7 +39,7 @@ class LogisticRegression:
         return dj_dw, dj_db
 
 
-    def train(self, learning_rate=0.01, epochs=100, _lambda=0, optimizer=None, b_init=None, w_init=None):
+    def train(self, learning_rate=0.01, epochs=100, _lambda=0, optimizer=None, b_init=None, w_init=None, with_print="YES"):
         if optimizer is None:
             optimizer = self.gradient
         
@@ -58,7 +58,7 @@ class LogisticRegression:
             w = w*(1 - learning_rate*_lambda/self.m) - learning_rate*dj_dw
             b = b - learning_rate*dj_db
             
-            if not k%(epochs/10):
+            if not k%(epochs/10) and with_print == "YES":
                 print(f"[+] Epochs: {k}/{epochs} loss Function : {self.loss(w,b)}")
         
         self.w, self.b = w, b
@@ -110,8 +110,8 @@ class LogisticRegression:
         for alpha in learning_rates:
             for lambda_ in lambdas:
                 for epoch in epochs:
-                    print(f"\n\n[+] Trying learning rate: {alpha}, lambda: {lambda_}, epochs: {epoch}\n\n")
-                    w, b = self.train(learning_rate=alpha, _lambda=lambda_, epochs=epoch)
+                    print(f"\n[*] Trying learning rate: {alpha}, lambda: {lambda_}, epochs: {epoch}\n")
+                    w, b = self.train(learning_rate=alpha, _lambda=lambda_, epochs=epoch, with_print="NO")
                     acc = self.accuracy(x, y, w, b, error=error)
                     if acc > best_acc:
                         best_w = w
